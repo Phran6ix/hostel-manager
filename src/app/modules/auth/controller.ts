@@ -32,7 +32,24 @@ class UserController extends BaseController {
       this.next(error);
     }
   }
-  //   GENERATE USER FROM TOKEN FOR THIS ENDPOINT
+
+  public async HTTPSendPhoneVerification(): Promise<any> {
+    try {
+      const data = await UserService.SendPhoneOTP(this.req.body);
+      this.responseHandler(data);
+    } catch (error) {
+      this.next(error);
+    }
+  }
+
+  public async HTTPVerifyPhoneOTP(): Promise<any> {
+    try {
+      const data = await UserService.VerifyPhoneOTP(this.req.body);
+      this.responseHandler(data);
+    } catch (error) {
+      this.next(error);
+    }
+  }
   public async HTTPUpdatePassword(): Promise<any> {
     try {
       const user = await HelperFunctions.getUserDataFromToken(this.req.headers);

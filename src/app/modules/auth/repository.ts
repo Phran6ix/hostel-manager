@@ -8,6 +8,7 @@ import {
   InvalidRequestError,
   InvalidTokenError,
   NotFoundError,
+  VerificatioError,
 } from "../../utilities/error";
 import Constants from "../../utilities/constant";
 
@@ -136,6 +137,39 @@ class UserRepository implements IUserRepo<IUserType> {
       let user = await User.findOneAndUpdate({ email: props["email"] }, { otpVerified: true });
 
       if (!user) throw NotFoundError("Account not found");
+      return;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // FOR PHONE NUMBER VERIFICATION
+  public async sendOTPToPhone(props: { phone: string }): Promise<void> {
+    try {
+      const user = await User.findOne({ phone: props["phone"] });
+      if (!user) throw NotFoundError("User not found");
+
+      if (user.isVerified) throw AccountStatusError("Your Account is already verified");
+
+      await HelperFunctions.SendOTPToPhone(user.phone);
+      console.log("DONE");
+      return;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async verifyPhoneOTP(props: { phone: string; otp: string }): Promise<void> {
+    try {
+      const user = await User.findOne({ phone: props["phone"] });
+      if (!user) throw NotFoundError("User not found");
+
+      const verified = await HelperFunctions.VerifyPhoneOtp(props["phone"], props["otp"]);
+      if (!verified) throw VerificatioError("Invalid or Expired token");
+
+      user.isVerified = true;
+      await user.save();
+
       return;
     } catch (error) {
       throw error;

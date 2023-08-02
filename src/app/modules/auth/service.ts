@@ -1,3 +1,4 @@
+import { IResponseType } from "../../utilities/types";
 import UserRepository from "./repository";
 
 const Repository = new UserRepository();
@@ -8,7 +9,7 @@ export default class UserService {
     fullname: string;
     phone: string;
     password: string;
-  }) {
+  }): Promise<IResponseType> {
     await Repository.sign_up(data);
     return {
       status: 201,
@@ -17,7 +18,11 @@ export default class UserService {
     };
   }
 
-  public static async Sign_in(data: { email?: string; phone_number?: string; password: string }) {
+  public static async Sign_in(data: {
+    email?: string;
+    phone_number?: string;
+    password: string;
+  }): Promise<IResponseType> {
     return {
       status: 200,
       message: "User login successfully",
@@ -25,7 +30,7 @@ export default class UserService {
     };
   }
 
-  public static async Verify_account(data: { email: string; otp: string }) {
+  public static async Verify_account(data: { email: string; otp: string }): Promise<IResponseType> {
     await Repository.verifyAccount(data);
     return {
       status: 200,
@@ -33,7 +38,11 @@ export default class UserService {
       data: null,
     };
   }
-  public static async Update_password(data: { user: any; password: string; new_password: string }) {
+  public static async Update_password(data: {
+    user: any;
+    password: string;
+    new_password: string;
+  }): Promise<IResponseType> {
     await Repository.update_password(data);
     return {
       status: 200,
@@ -41,7 +50,7 @@ export default class UserService {
       data: null,
     };
   }
-  public static async ResendOTP(email: string) {
+  public static async ResendOTP(email: string): Promise<IResponseType> {
     await Repository.sendOTP(email);
     return {
       status: 200,
@@ -50,7 +59,7 @@ export default class UserService {
     };
   }
 
-  public static async VerifyOTP(data: { email: string; otp: string }) {
+  public static async VerifyOTP(data: { email: string; otp: string }): Promise<IResponseType> {
     await Repository.verifyOTP(data);
     return {
       status: 200,
@@ -59,7 +68,28 @@ export default class UserService {
     };
   }
 
-  public static async Forgot_password(data: { email?: string; phone_number?: string }) {
+  public static async SendPhoneOTP(data: { phone: string }): Promise<IResponseType> {
+    await Repository.sendOTPToPhone(data);
+    return {
+      status: 200,
+      message: "OTP has been sent your phone",
+      data: null,
+    };
+  }
+
+  public static async VerifyPhoneOTP(data: { phone: string; otp: string }): Promise<IResponseType> {
+    await Repository.verifyPhoneOTP(data);
+    return {
+      status: 200,
+      message: "Phone number has been verified",
+      data: null,
+    };
+  }
+
+  public static async Forgot_password(data: {
+    email?: string;
+    phone_number?: string;
+  }): Promise<IResponseType> {
     await Repository.forgot_password(data);
     return {
       status: 200,
@@ -67,7 +97,10 @@ export default class UserService {
       data: null,
     };
   }
-  public static async Reset_password(data: { email: string; new_password: string }) {
+  public static async Reset_password(data: {
+    email: string;
+    new_password: string;
+  }): Promise<IResponseType> {
     await Repository.reset_password(data);
     return {
       status: 200,
@@ -75,7 +108,7 @@ export default class UserService {
       data: null,
     };
   }
-  public static async Get_Current_User(data: { user: any }) {
+  public static async Get_Current_User(data: { user: any }): Promise<IResponseType> {
     return {
       status: 200,
       message: "User data succesfully retrieved",

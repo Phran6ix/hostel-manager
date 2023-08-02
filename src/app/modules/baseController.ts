@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { IResponseType } from "../utilities/types";
 
 abstract class BaseController {
   req: Request;
@@ -10,11 +11,7 @@ abstract class BaseController {
     this.next = next;
   }
 
-  protected responseHandler(data: {
-    status: number;
-    message: string;
-    data: object | null;
-  }): Response {
+  protected responseHandler(data: IResponseType): Response {
     return this.res.status(data["status"]).json({
       success: true,
       message: data["message"],

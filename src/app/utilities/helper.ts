@@ -9,6 +9,7 @@ import EmailService from "../services/email";
 import { redisClient } from "../services/connect_redis";
 import { HTTPErrorType } from "./error";
 import { Response } from "express";
+import SMSService from "../services/sms";
 
 // HASHING
 export class HelperFunctions {
@@ -40,8 +41,32 @@ export class HelperFunctions {
     return await jwt.verify(token, Config.JWT_SECRET);
   }
 
+  public static async SendOTPToPhone(phone: string): Promise<void> {
+    const otp = this.generateOTP();
+
+    let text = `Your one time Account verification is ${otp}`;
+    await new SMSService({ body: text, to: phone }).sendMessage();
+
+    await redisClient.set(`otp_phone-${phone}`, otp, {
+      EX: 10 * 60,
+    });
+    return;
+  }
+
+  public static async VerifyPhoneOtp(phone: string, otp: string): Promise<boolean> {
+    const otpKey = `otp-phone_${phone}`;
+
+    const otpData = await redisClient.get(otpKey);
+
+    if (!otpData || otpData != otp) {
+      return false;
+    }
+    await redisClient.del(otpKey);
+    return true;
+  }
+
   public static async sendOTPToEmail(email: string, subject: string) {
-    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otp = this.generateOTP();
 
     await new EmailService({
       email,
@@ -49,14 +74,17 @@ export class HelperFunctions {
       message: `Your OTP is ${otp}`,
     }).sendMail();
 
-    await redisClient.set(`otp-${email}`, otp, {
+    await redisClient.set(`otp-email_${email}`, otp, {
       EX: 10 * 60,
     });
     return;
   }
+  static generateOTP(): number {
+    return Math.floor(100000 + Math.random() * 900000);
+  }
 
   public static async verifyOTP(email: string, otp: string) {
-    let otpKey = `otp-${email}`;
+    let otpKey = `otp-email_${email}`;
     const otpData = await redisClient.get(otpKey);
 
     if (!otpData || otpData != otp) {

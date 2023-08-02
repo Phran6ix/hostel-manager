@@ -19,6 +19,9 @@ export const InvalidTokenError = (message: string) =>
 
 export const AuthorizedError = (message: string) => new HTTPErrorType(401, "Unauthorized", message);
 
+export const VerificatioError = (message: string) =>
+  new HTTPErrorType(400, message, "Verification Error");
+
 export const InvalidRequestError = (message: string) =>
   new HTTPErrorType(400, "Invalid Request", message);
 
