@@ -2,7 +2,8 @@ class Config {
   //
   public static HASH_SALT = 12;
   //  FOR MONGODB
-  public static MONGO_URL = process.env.MONGO_URI;
+  public static MONGO_URI = process.env.MONGO_URI;
+
   public static MONGO_HOST = process.env.MONGO_HOST || "mongo";
   public static MONGO_PORT = process.env.MONGO_PORT || 27017;
   //  FOR MYSQL
@@ -29,6 +30,9 @@ class Config {
   public static SMTP_PASS = process.env.SMTP_PASS || "";
   public static SMTP_HOST = process.env.SMTP_HOST || "";
   public static SMTP_PORT = process.env.SMTP_PORT || 3000;
+
+  public static SMTP_EMAIL = process.env.SMTP_EMAIL;
+  public static SMTP_PASSWORD = process.env.SMTP_PASSWORD;
   // SMS
   public static TWILIO_SSID = process.env.TWILIO_SSID;
   public static TWILIO_TOKEN = process.env.TWILIO_TOKEN;

@@ -10,6 +10,7 @@ import UserRouter from "./app/modules/auth";
 import { HTTPErrorType } from "./app/utilities/error";
 import ErrorHandler from "./app/utilities/globalErrorHandler";
 
+console.log(process.env.NODE_ENV);
 class Server {
   private app = express();
   private apiVersion = "/v1";

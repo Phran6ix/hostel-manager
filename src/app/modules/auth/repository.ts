@@ -49,6 +49,7 @@ class UserRepository implements IUserRepo<IUserType> {
 
   public async sign_up(data: Partial<IUserType>): Promise<void> {
     try {
+      console.log("in here");
       const user = new User({
         email: data.email,
         fullname: data.fullname,

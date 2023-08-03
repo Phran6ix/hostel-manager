@@ -20,15 +20,17 @@ export default class Database {
         .catch((error: any) => {
           console.error(`MongoDB connection failed , ${error}`);
         });
-    } else if (Config.NODE_ENV == Constants.NODE_ENVIRONMENT["PRODUCTION"] && Config.MONGO_URL) {
+    } else if (Config.NODE_ENV == Constants.NODE_ENVIRONMENT["PRODUCTION"] && !!Config.MONGO_URI) {
       return mongoose
-        .connect(Config.MONGO_URL)
+        .connect(Config.MONGO_URI)
         .then(() => {
-          console.log("MongoDB database connection");
+          console.log("MongoDB database connection successful");
         })
         .catch((error: any) => {
           console.error(`MongoDB connection failed , ${error}`);
         });
+    } else {
+      console.log("......MONGO CONNECTION FAILED......");
     }
   }
 

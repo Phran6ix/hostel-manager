@@ -26,12 +26,16 @@ export default class EmailService {
           pass: Config.SMTP_PASS,
         },
       });
-    } else {
-      return this.transport;
+    } else if (Config.NODE_ENV == Constants.NODE_ENVIRONMENT.PRODUCTION) {
+      return nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: Config.SMTP_EMAIL,
+          pass: Config.SMTP_PASSWORD,
+        },
+      });
     }
-    // if (Config.NODE_ENV == Constants.NODE_ENVIRONMENT.PRODUCTION) {
-    //   //   return this.transport.sendMail(t)
-    // }
+    return this.transport;
   }
 
   private get option(): { to: string; from: string; subject: string; text: string } {
