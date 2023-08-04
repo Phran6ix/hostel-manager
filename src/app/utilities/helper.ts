@@ -115,11 +115,11 @@ export class HelperFunctions {
     return uuidV1();
   }
 
-  public static paginate(page: number, limit: number): { limit: number; offset: number } {
-    const offset = page * limit - limit;
+  public static paginate(data: { page: number; limit: number }): { limit: number; offset: number } {
+    const offset = data.page * data.limit - data.limit;
     return {
       offset,
-      limit,
+      limit: data.limit,
     };
   }
 }

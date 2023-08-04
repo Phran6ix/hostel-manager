@@ -24,7 +24,7 @@ export default class HostelService {
     };
   }
 
-  public async GetAllHostel(data: { limit: number; page: number }): Promise<IResponseType> {
+  public async GetAllHostel(data: { limit?: number; page?: number }): Promise<IResponseType> {
     return {
       status: 200,
       message: "Hostels information fetched",

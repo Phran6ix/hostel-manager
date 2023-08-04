@@ -21,12 +21,17 @@ export default class HostelRepository {
   }
 
   public async GetAllHostel(props: {
-    limit: number;
-    page: number;
+    limit?: number;
+    page?: number;
   }): Promise<{ hostels: HostelInterface[]; total: number }> {
     try {
+      let filterPaginate: any = {};
+      if (props.limit || props.page) {
+        filterPaginate = { page: props.page, limit: props.limit };
+      }
+
       const { rows, count } = await this.hostel_model.findAndCountAll({
-        ...HelperFunctions.paginate(props.limit, props.page),
+        ...HelperFunctions.paginate({ ...filterPaginate }),
       });
       return { total: count, hostels: rows };
     } catch (error) {
