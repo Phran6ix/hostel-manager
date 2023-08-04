@@ -4,6 +4,7 @@ import Constants from "../../utilities/constant";
 
 const userSchema = new Schema<IUserType>(
   {
+    // TASK - ADD UUID TO THE MODEL
     fullname: {
       type: String,
       required: true,

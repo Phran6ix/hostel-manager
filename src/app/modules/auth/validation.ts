@@ -67,6 +67,19 @@ class AuthValidation {
       authorization: z.string({ required_error: "Unauthorized" }).startsWith("Bearer"),
     }),
   });
+
+  static request_phone_otp = z.object({
+    body: z.object({
+      phone: z.string({ required_error: "Phone number is required" }).trim(),
+    }),
+  });
+
+  static verify_phone_otp = z.object({
+    body: z.object({
+      phone: z.string({ required_error: "Phone number is required" }),
+      otp: z.string({ required_error: "OTP is required" }),
+    }),
+  });
 }
 
 export default AuthValidation;

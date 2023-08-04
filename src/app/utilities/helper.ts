@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { AnyZodObject } from "zod";
+import { v1 as uuidV1 } from "uuid";
 
 import Config from "./config";
 import Constants from "./constant";
@@ -8,7 +9,7 @@ import { IUserType } from "../modules/auth/types";
 import EmailService from "../services/email";
 import { redisClient } from "../services/connect_redis";
 import { HTTPErrorType } from "./error";
-import { Response } from "express";
+import { NextFunction, Response } from "express";
 import SMSService from "../services/sms";
 
 // HASHING
@@ -65,7 +66,7 @@ export class HelperFunctions {
     return true;
   }
 
-  public static async sendOTPToEmail(email: string, subject: string) {
+  public static async sendOTPToEmail(email: string, subject: string): Promise<void> {
     const otp = this.generateOTP();
 
     await new EmailService({
@@ -83,7 +84,7 @@ export class HelperFunctions {
     return Math.floor(100000 + Math.random() * 900000);
   }
 
-  public static async verifyOTP(email: string, otp: string) {
+  public static async verifyOTP(email: string, otp: string): Promise<Boolean | null> {
     let otpKey = `otp-email_${email}`;
     const otpData = await redisClient.get(otpKey);
 
@@ -94,7 +95,7 @@ export class HelperFunctions {
     return true;
   }
 
-  public static validate(schema: AnyZodObject) {
+  public static validate(schema: AnyZodObject): Function {
     return async (req: any, res: any, next: any) => {
       try {
         await schema.parse({
@@ -110,7 +111,15 @@ export class HelperFunctions {
     };
   }
 
-  public static ErrorHandler = (err: HTTPErrorType, res: Response) => {
-    return res.status(err.statusCode || 500).json();
-  };
+  public static UUID() {
+    return uuidV1();
+  }
+
+  public static paginate(page: number, limit: number): { limit: number; offset: number } {
+    const offset = page * limit - limit;
+    return {
+      offset,
+      limit,
+    };
+  }
 }

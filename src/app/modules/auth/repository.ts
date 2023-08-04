@@ -49,7 +49,6 @@ class UserRepository implements IUserRepo<IUserType> {
 
   public async sign_up(data: Partial<IUserType>): Promise<void> {
     try {
-      console.log("in here");
       const user = new User({
         email: data.email,
         fullname: data.fullname,
@@ -111,7 +110,6 @@ class UserRepository implements IUserRepo<IUserType> {
       });
 
       if (!user) throw NotFoundError("Account not found");
-      console.log(user);
 
       if (user.isVerified) throw AccountStatusError("Your account is already verified");
 
@@ -147,6 +145,7 @@ class UserRepository implements IUserRepo<IUserType> {
   // FOR PHONE NUMBER VERIFICATION
   public async sendOTPToPhone(props: { phone: string }): Promise<void> {
     try {
+      console.log(props)
       const user = await User.findOne({ phone: props["phone"] });
       if (!user) throw NotFoundError("User not found");
 

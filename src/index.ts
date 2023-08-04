@@ -10,7 +10,6 @@ import UserRouter from "./app/modules/auth";
 import { HTTPErrorType } from "./app/utilities/error";
 import ErrorHandler from "./app/utilities/globalErrorHandler";
 
-console.log(process.env.NODE_ENV);
 class Server {
   private app = express();
   private apiVersion = "/v1";
@@ -59,6 +58,7 @@ class Server {
     return (err: HTTPErrorType, req: Request, res: Response, next: NextFunction) => {
       if (err) {
         if (err.name == "ZodError") return ErrorHandler.HandleZodError(err, req, res, next);
+
         res.status(err.statusCode || 500).json({
           success: false,
           message: err.message || "An Error occured",

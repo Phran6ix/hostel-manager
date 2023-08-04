@@ -14,13 +14,14 @@ class SMSService {
     try {
       let data = await client.messages.create({
         body: this.body,
-        from: "2347033167594",
-        to: this.to,
+        from: "+2347033167594",
+        to: ` ${this.to}`,
       });
       console.log("SMS SENT SUCCESSFULLY");
       console.log(data.sid);
       return;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

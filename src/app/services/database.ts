@@ -5,12 +5,14 @@ import Config from "../utilities/config";
 import Constants from "../utilities/constant";
 
 export default class Database {
+  static SequelizeClient: Sequelize;
+
   constructor() {
     this.connectMongoose();
-    this.connectSequelize();
+    Database.SequelizeClient = this.connectSequelize();
   }
 
-  connectMongoose() {
+  private connectMongoose() {
     if (Config.NODE_ENV == Constants.NODE_ENVIRONMENT["DEVELOPMENT"]) {
       return mongoose
         .connect(`mongodb://${Config.MONGO_HOST}:${Config.MONGO_PORT}/hoster-manager`)
@@ -34,17 +36,7 @@ export default class Database {
     }
   }
 
-  connectSequelize() {
-    // let sequelize = new Sequelize(
-    //   `${Config.MYSQL_DATABASE}`,
-    //   "root",
-    //   `${Config.MYSQL_PASSWORD}`,
-    //   {
-    //     host: Config.MYSQL_HOST,
-    //     port: 3306,
-    //     dialect: "mysql",
-    //   }
-    // )
+  private connectSequelize() {
     let sequelize = new Sequelize(
       `postgres://${Config.POSTGRES_USER}:${Config.POSTGRES_PASSWORD}@${Config.POSTGRES_HOST}:5432/${Config.POSTGRES_DB}`,
       { dialect: "postgres" }

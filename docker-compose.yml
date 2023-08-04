@@ -32,6 +32,7 @@ services:
       - mongo-db:/data/db
     networks:
       - hostel-manager
+
     environment:
       - MONGO_USERNAME={{MONGO_USERNAME}}
       - MONGO_PASSWORD={{MONGO_PASSWORD}}

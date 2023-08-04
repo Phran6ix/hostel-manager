@@ -13,6 +13,7 @@ class Constants {
     FORGOT_PASSWORD: "Your reset password token",
     RESEND_OTP: "One Time Password",
   };
+  public static PAGINATION_LIMIT = 10;
 }
 
 export default Constants;

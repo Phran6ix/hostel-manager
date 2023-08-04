@@ -9,7 +9,6 @@ class UserController extends BaseController {
   }
   public async HTTPRegiserAUser(): Promise<any> {
     try {
-      console.log("Create User");
       const data = await UserService.RegisterUser(this.req.body);
       this.responseHandler(data);
     } catch (error) {

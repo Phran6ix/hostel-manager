@@ -50,6 +50,18 @@ class UserRouter {
     this.router.get(`${this.path}/me`, validate(AuthValidation.get_current_user), (...x) =>
       new UserController(...x).HTTPGetCurrentUser()
     );
+
+    // PHONE VERIFICATION
+    this.router.get(
+      `${this.path}/send-phone-otp`,
+      validate(AuthValidation.request_phone_otp),
+      (...x) => new UserController(...x).HTTPSendPhoneVerification()
+    );
+    this.router.patch(
+      `${this.path}/verify-phone-otp`,
+      validate(AuthValidation.verify_phone_otp),
+      (...x) => new UserController(...x).HTTPVerifyPhoneOTP()
+    );
   }
 }
 
