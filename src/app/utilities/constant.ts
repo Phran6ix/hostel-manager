@@ -13,6 +13,14 @@ class Constants {
     FORGOT_PASSWORD: "Your reset password token",
     RESEND_OTP: "One Time Password",
   };
+
+  public static HOSTEL_TYPE = {
+    SINGLE: "Single room",
+    SELF_CON: "Self con",
+    ROOM_PALOUR: "Room and Palour",
+    TWO_BEDROOM: "Two bedroom flat",
+  } as const;
+
   public static PAGINATION_LIMIT = 10;
 }
 

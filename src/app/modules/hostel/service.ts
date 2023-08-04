@@ -1,6 +1,7 @@
 import HostelRepository from "./repository";
-import { HostelInterface, HostelTypeEnum } from "./type";
+import { HostelInterface, HostelType } from "./type";
 import { IResponseType } from "../../utilities/types";
+import Constants from "../../utilities/constant";
 
 export default class HostelService {
   public hostel_repo;
@@ -15,7 +16,7 @@ export default class HostelService {
     location: string;
     address: string;
     images: string[];
-    type: HostelTypeEnum;
+    type: HostelType;
   }): Promise<IResponseType> {
     return {
       status: 201,
