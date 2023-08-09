@@ -60,7 +60,7 @@ export default class UserService {
   }
 
   public static async VerifyOTP(data: { email: string; otp: string }): Promise<IResponseType> {
-    await Repository.verifyOTP(data);
+    // await Repository.verifyOTP(data);
     return {
       status: 200,
       message: "OTP verified",
@@ -69,7 +69,7 @@ export default class UserService {
   }
 
   public static async SendPhoneOTP(data: { phone: string }): Promise<IResponseType> {
-    await Repository.sendOTPToPhone(data);
+    // await Repository.sendOTPToPhone(data);
     return {
       status: 200,
       message: "OTP has been sent your phone",
@@ -78,7 +78,7 @@ export default class UserService {
   }
 
   public static async VerifyPhoneOTP(data: { phone: string; otp: string }): Promise<IResponseType> {
-    await Repository.verifyPhoneOTP(data);
+    // await Repository.verifyPhoneOTP(data);
     return {
       status: 200,
       message: "Phone number has been verified",

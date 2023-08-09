@@ -1,11 +1,9 @@
 import { Model } from "sequelize";
+import Constants from "../../utilities/constant";
 
-export enum HostelTypeEnum {
-  SINGLE = "Single room",
-  SELF_CON = "Self con",
-  ROOM_PALOUR = "Room and Palour",
-  TWO_BEDROOM = "Two bedroom flat",
-}
+type ObjectValues<T> = T[keyof T]
+export type HostelType = ObjectValues<typeof Constants.HOSTEL_TYPE>
+
 export interface HostelInterface extends Model {
   hostelId: string;
   name: string;
@@ -13,6 +11,8 @@ export interface HostelInterface extends Model {
   location: string;
   address: string;
   images: string[];
-  type: HostelTypeEnum;
+  type: HostelType
+  
   createdAt?: Date;
 }
+

@@ -2,7 +2,7 @@ import { DataType, DataTypes } from "sequelize";
 import { HostelInterface } from "./type";
 import Database from "../../services/database";
 import { HelperFunctions } from "../../utilities/helper";
-const sequelize = Database.SequelizeClient;
+import sequelize from "../../services/connect_sequelize";
 
 const Hostel = sequelize.define<HostelInterface>(
   "Hostel",
@@ -17,7 +17,7 @@ const Hostel = sequelize.define<HostelInterface>(
       allowNull: false,
     },
     price: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     location: {

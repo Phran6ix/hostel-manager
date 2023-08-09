@@ -10,9 +10,8 @@ import EmailService from "../services/email";
 import { redisClient } from "../services/connect_redis";
 import { HTTPErrorType } from "./error";
 import { NextFunction, Response } from "express";
-import SMSService from "../services/sms";
+// import SMSService from "../services/sms";
 
-// HASHING
 export class HelperFunctions {
   public static async hashString(string: string) {
     const hashed = await bcrypt.hash(string, Config.HASH_SALT);
@@ -42,29 +41,31 @@ export class HelperFunctions {
     return await jwt.verify(token, Config.JWT_SECRET);
   }
 
-  public static async SendOTPToPhone(phone: string): Promise<void> {
-    const otp = this.generateOTP();
+  // public
 
-    let text = `Your one time Account verification is ${otp}`;
-    await new SMSService({ body: text, to: phone }).sendMessage();
+  // public static async SendOTPToPhone(phone: string): Promise<void> {
+  //   const otp = this.generateOTP();
 
-    await redisClient.set(`otp_phone-${phone}`, otp, {
-      EX: 10 * 60,
-    });
-    return;
-  }
+  //   let text = `Your one time Account verification is ${otp}`;
+  //   await new SMSService({ body: text, to: phone }).sendMessage();
 
-  public static async VerifyPhoneOtp(phone: string, otp: string): Promise<boolean> {
-    const otpKey = `otp-phone_${phone}`;
+  //   await redisClient.set(`otp_phone-${phone}`, otp, {
+  //     EX: 10 * 60,
+  //   });
+  //   return;
+  // }
 
-    const otpData = await redisClient.get(otpKey);
+  // public static async VerifyPhoneOtp(phone: string, otp: string): Promise<boolean> {
+  //   const otpKey = `otp-phone_${phone}`;
 
-    if (!otpData || otpData != otp) {
-      return false;
-    }
-    await redisClient.del(otpKey);
-    return true;
-  }
+  //   const otpData = await redisClient.get(otpKey);
+
+  //   if (!otpData || otpData != otp) {
+  //     return false;
+  //   }
+  //   await redisClient.del(otpKey);
+  //   return true;
+  // }
 
   public static async sendOTPToEmail(email: string, subject: string): Promise<void> {
     const otp = this.generateOTP();
@@ -95,7 +96,7 @@ export class HelperFunctions {
     return true;
   }
 
-  public static validate(schema: AnyZodObject): Function {
+  public static validate(schema: AnyZodObject) {
     return async (req: any, res: any, next: any) => {
       try {
         await schema.parse({

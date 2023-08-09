@@ -1,15 +1,13 @@
 import mongoose from "mongoose";
-import { Sequelize } from "sequelize";
+import sequelize from "./connect_sequelize";
 
 import Config from "../utilities/config";
 import Constants from "../utilities/constant";
 
 export default class Database {
-  static SequelizeClient: Sequelize;
-
   constructor() {
     this.connectMongoose();
-    Database.SequelizeClient = this.connectSequelize();
+    this.connectSequelize();
   }
 
   private connectMongoose() {
@@ -36,20 +34,23 @@ export default class Database {
     }
   }
 
-  private connectSequelize() {
-    let sequelize = new Sequelize(
-      `postgres://${Config.POSTGRES_USER}:${Config.POSTGRES_PASSWORD}@${Config.POSTGRES_HOST}:5432/${Config.POSTGRES_DB}`,
-      { dialect: "postgres" }
-    );
+  public connectSequelize() {
+    // sequelize
+    //   .authenticate()
+    //   .then(() => console.log(`Database connected successfully`))
+    //   .catch((error) => {
+    //     console.log("postgres error");
+    //     console.error(`Database connection failed, ${error}`);
+
+    //   });
 
     sequelize
-      .authenticate()
-      .then(() => console.log(`Database connected successfully`))
+      .sync({ alter: true })
+      .then(() => {
+        console.log("Sequelize Database connected successfully");
+      })
       .catch((error) => {
-        console.log("postgres error");
-        console.error(`Database connection failed, ${error}`);
+        console.log("Sequelize connection failed", error);
       });
-
-    return sequelize;
   }
 }

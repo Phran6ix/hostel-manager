@@ -52,16 +52,16 @@ class UserRouter {
     );
 
     // PHONE VERIFICATION
-    this.router.get(
-      `${this.path}/send-phone-otp`,
-      validate(AuthValidation.request_phone_otp),
-      (...x) => new UserController(...x).HTTPSendPhoneVerification()
-    );
-    this.router.patch(
-      `${this.path}/verify-phone-otp`,
-      validate(AuthValidation.verify_phone_otp),
-      (...x) => new UserController(...x).HTTPVerifyPhoneOTP()
-    );
+    // this.router.get(
+    //   `${this.path}/send-phone-otp`,
+    //   validate(AuthValidation.request_phone_otp),
+    //   (...x) => new UserController(...x).HTTPSendPhoneVerification()
+    // );
+    // this.router.patch(
+    //   `${this.path}/verify-phone-otp`,
+    //   validate(AuthValidation.verify_phone_otp),
+    //   (...x) => new UserController(...x).HTTPVerifyPhoneOTP()
+    // );
   }
 }
 

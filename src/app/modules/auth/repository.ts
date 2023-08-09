@@ -143,38 +143,38 @@ class UserRepository implements IUserRepo<IUserType> {
   }
 
   // FOR PHONE NUMBER VERIFICATION
-  public async sendOTPToPhone(props: { phone: string }): Promise<void> {
-    try {
-      console.log(props)
-      const user = await User.findOne({ phone: props["phone"] });
-      if (!user) throw NotFoundError("User not found");
+  // public async sendOTPToPhone(props: { phone: string }): Promise<void> {
+  //   try {
+  //     console.log(props)
+  //     const user = await User.findOne({ phone: props["phone"] });
+  //     if (!user) throw NotFoundError("User not found");
 
-      if (user.isVerified) throw AccountStatusError("Your Account is already verified");
+  //     if (user.isVerified) throw AccountStatusError("Your Account is already verified");
 
-      await HelperFunctions.SendOTPToPhone(user.phone);
-      console.log("DONE");
-      return;
-    } catch (error) {
-      throw error;
-    }
-  }
+  //     await HelperFunctions.SendOTPToPhone(user.phone);
+  //     console.log("DONE");
+  //     return;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
-  public async verifyPhoneOTP(props: { phone: string; otp: string }): Promise<void> {
-    try {
-      const user = await User.findOne({ phone: props["phone"] });
-      if (!user) throw NotFoundError("User not found");
+  // public async verifyPhoneOTP(props: { phone: string; otp: string }): Promise<void> {
+  //   try {
+  //     const user = await User.findOne({ phone: props["phone"] });
+  //     if (!user) throw NotFoundError("User not found");
 
-      const verified = await HelperFunctions.VerifyPhoneOtp(props["phone"], props["otp"]);
-      if (!verified) throw VerificatioError("Invalid or Expired token");
+  //     const verified = await HelperFunctions.VerifyPhoneOtp(props["phone"], props["otp"]);
+  //     if (!verified) throw VerificatioError("Invalid or Expired token");
 
-      user.isVerified = true;
-      await user.save();
+  //     user.isVerified = true;
+  //     await user.save();
 
-      return;
-    } catch (error) {
-      throw error;
-    }
-  }
+  //     return;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   public async forgot_password(props: {
     email?: string | undefined;

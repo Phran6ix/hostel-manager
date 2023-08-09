@@ -7,20 +7,23 @@ import Database from "./app/services/database";
 import { IRoutes } from "./app/utilities/types";
 // ROUTES
 import UserRouter from "./app/modules/auth";
+import HostelRoutes from "./app/modules/hostel";
 import { HTTPErrorType } from "./app/utilities/error";
 import ErrorHandler from "./app/utilities/globalErrorHandler";
+
+// export let sequelize: Sequelize;
 
 class Server {
   private app = express();
   private apiVersion = "/v1";
+
   constructor() {
+    this.startServer();
     this.middleWare();
     this.connectDb();
     this.health();
     this.instatiateRoutes();
     this.app.use(this.GlobalErrorHandler());
-
-    this.startServer();
   }
 
   private middleWare() {
@@ -47,7 +50,7 @@ class Server {
   }
 
   private instatiateRoutes() {
-    let routes: IRoutes[] = [new UserRouter()];
+    let routes: IRoutes[] = [new UserRouter(), new HostelRoutes()];
 
     routes.forEach((router) => {
       this.app.use(this.apiVersion, router["router"]);

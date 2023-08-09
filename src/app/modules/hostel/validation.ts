@@ -10,6 +10,9 @@ class HostelValidation {
       images: z.array(z.string()).nonempty().min(6, "Maximum number of images reached"),
       type: z.nativeEnum(Constants.HOSTEL_TYPE, { required_error: "Hostel is required" }),
     }),
+    headers: z.object({
+      authorization: z.string({ required_error: "You are not signed in" }),
+    }),
   });
 
   static get_all_hostel = z.object({
@@ -44,3 +47,5 @@ class HostelValidation {
     }),
   });
 }
+
+export default HostelValidation;
