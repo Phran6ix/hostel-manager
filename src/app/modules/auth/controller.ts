@@ -51,8 +51,8 @@ class UserController extends BaseController {
   // }
   public async HTTPUpdatePassword(): Promise<any> {
     try {
-      const user = await HelperFunctions.getUserDataFromToken(this.req.headers);
-      const data = await UserService.Update_password({ user, ...this.req.body });
+      // const user = await HelperFunctions.getUserDataFromToken(this.req.headers);
+      const data = await UserService.Update_password({ user: this.req.user, ...this.req.body });
 
       this.responseHandler(data);
     } catch (error) {
@@ -94,8 +94,21 @@ class UserController extends BaseController {
 
   public async HTTPGetCurrentUser(): Promise<any> {
     try {
-      const user = await HelperFunctions.getUserDataFromToken(this.req.headers);
-      const data = await UserService.Get_Current_User({ user });
+      // const user = await HelperFunctions.getUserDataFromToken(this.req.headers);
+      const data = await UserService.Get_Current_User({ user: this.req.user! });
+      this.responseHandler(data);
+    } catch (error) {
+      this.next(error);
+    }
+  }
+
+  public async HTTPUpdateUserProfile(): Promise<any> {
+    try {
+      console.log(this.req.user);
+      const data = await UserService.updateUserProfile({
+        user: this.req.user!,
+        data: this.req.body,
+      });
       this.responseHandler(data);
     } catch (error) {
       this.next(error);

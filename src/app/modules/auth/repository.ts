@@ -127,6 +127,19 @@ class UserRepository implements IUserRepo<IUserType> {
     }
   }
 
+  public async uploadProfilePhoto(props: { user: IUserType; avatar: string }): Promise<void> {
+    try {
+      const user = await User.findOne({ userId: props.user.userId });
+      if (!user) throw NotFoundError("User Not Found");
+
+      user.avatar = props["avatar"];
+      await user.save();
+      return;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public async verifyOTP(props: { email: string; otp: string }): Promise<void> {
     try {
       const validOtp = await HelperFunctions.verifyOTP(props.email, props.otp);
@@ -225,7 +238,29 @@ class UserRepository implements IUserRepo<IUserType> {
     try {
       const user = await User.findOne({ email: data.user["email"] });
       if (!user) throw NotFoundError("Account Not found");
-      return user;
+      return user.toJSON();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async updateUserProfile(props: { user: Partial<IUserType>; data: any }): Promise<void> {
+    try {
+      const user = (await User.findOne({ userId: props.user.userId })) as any;
+      if (!user) throw NotFoundError("User not found");
+      console.log(user);
+
+      if (!!props.data.email) {
+        throw AuthorizedError("Email cannot be updated after registration");
+      }
+
+      Object.keys(props.data).forEach((key: any) => {
+        user[key] = props.data.key;
+      });
+      console.log(user);
+
+      await user.save();
+      return;
     } catch (error) {
       throw error;
     }

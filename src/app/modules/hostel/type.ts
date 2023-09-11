@@ -1,8 +1,8 @@
 import { Model } from "sequelize";
 import Constants from "../../utilities/constant";
 
-type ObjectValues<T> = T[keyof T]
-export type HostelType = ObjectValues<typeof Constants.HOSTEL_TYPE>
+type ObjectValues<T> = T[keyof T];
+export type HostelType = ObjectValues<typeof Constants.HOSTEL_TYPE>;
 
 export interface HostelInterface extends Model {
   hostelId: string;
@@ -11,8 +11,7 @@ export interface HostelInterface extends Model {
   location: string;
   address: string;
   images: string[];
-  type: HostelType
-  
+  type: HostelType;
+  createdBy: string;
   createdAt?: Date;
 }
-

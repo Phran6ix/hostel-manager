@@ -5,13 +5,20 @@ import { config } from "dotenv";
 import Config from "./app/utilities/config";
 import Database from "./app/services/database";
 import { IRoutes } from "./app/utilities/types";
+import { IUserType } from "./app/modules/auth/types";
 // ROUTES
 import UserRouter from "./app/modules/auth";
 import HostelRoutes from "./app/modules/hostel";
 import { HTTPErrorType } from "./app/utilities/error";
 import ErrorHandler from "./app/utilities/globalErrorHandler";
 
-// export let sequelize: Sequelize;
+declare global {
+  namespace Express {
+    export interface Request {
+      user?: IUserType;
+    }
+  }
+}
 
 class Server {
   private app = express();

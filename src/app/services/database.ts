@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Sequelize } from "sequelize";
 import sequelize from "./connect_sequelize";
 
 import Config from "../utilities/config";
@@ -34,6 +35,11 @@ export default class Database {
     }
   }
 
+  public static sequelize: Sequelize = new Sequelize(
+    `postgres://${Config.POSTGRES_USER}:${Config.POSTGRES_PASSWORD}@${Config.POSTGRES_HOST}:5432/${Config.POSTGRES_DB}`,
+    { dialect: "postgres" }
+  );
+
   public connectSequelize() {
     // sequelize
     //   .authenticate()
@@ -44,7 +50,7 @@ export default class Database {
 
     //   });
 
-    sequelize
+    Database.sequelize
       .sync({ alter: true })
       .then(() => {
         console.log("Sequelize Database connected successfully");

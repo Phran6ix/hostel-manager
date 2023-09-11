@@ -21,6 +21,7 @@ class Config {
   //   REDIS
   public static REDIS_HOST = process.env.REDIS_HOST || "redis";
   public static REDIS_PORT = process.env.REDIS_PORT || 6379;
+  public static REDIS_URL = process.env.REDIS_URL
   // APPLICATION
   public static PORT = process.env.PORT || 3002;
   public static NODE_ENV = process.env.NODE_ENV;

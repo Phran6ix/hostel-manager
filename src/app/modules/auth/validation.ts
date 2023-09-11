@@ -8,7 +8,7 @@ class AuthValidation {
         .email("Email is not valid")
         .toLowerCase()
         .trim(),
-      phone: z.string({ required_error: "Phone number is required" }).trim().startsWith("234"),
+      phone: z.string({ required_error: "Phone number is required" }).trim(),
       fullname: z.string({ required_error: "Please input your fullname" }).trim(),
       password: z
         .string({ required_error: "Please input a password" })

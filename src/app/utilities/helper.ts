@@ -8,7 +8,7 @@ import Constants from "./constant";
 import { IUserType } from "../modules/auth/types";
 import EmailService from "../services/email";
 import { redisClient } from "../services/connect_redis";
-import { HTTPErrorType } from "./error";
+import { AuthorizedError, HTTPErrorType } from "./error";
 import { NextFunction, Response } from "express";
 // import SMSService from "../services/sms";
 
@@ -26,7 +26,7 @@ export class HelperFunctions {
   }
 
   public static async DecodeJWt(token: string): Promise<Partial<IUserType>> {
-    const user = await jwt.verify(token, Config.JWT_SECRET);
+    const user = await this.verifyToken(token);
 
     return user as IUserType;
   }
@@ -95,6 +95,26 @@ export class HelperFunctions {
     await redisClient.del(otpKey);
     return true;
   }
+
+  public static protect = (req: any, res: any, next: any) => {
+    // this.verifyToken(req.headers.authorization.split(" ")[1])
+    this.getUserDataFromToken(req.headers)
+      .then((res) => {
+        if (!res) throw AuthorizedError("Invalid Token");
+        req.user = res;
+        next();
+      })
+      .catch((error) => {
+        next(AuthorizedError("Invalid Token"));
+      });
+  };
+
+  public static validateRole = (...roles: any) => {
+    return (req: any, res: any, next: any) => {
+      if (!roles.includes(req.user.role)) throw AuthorizedError("You are not authorized");
+      next();
+    };
+  };
 
   public static validate(schema: AnyZodObject) {
     return async (req: any, res: any, next: any) => {

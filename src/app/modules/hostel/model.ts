@@ -1,19 +1,22 @@
-import { DataType, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
+import Constants from "../../utilities/constant";
 import { HostelInterface } from "./type";
 import Database from "../../services/database";
 import { HelperFunctions } from "../../utilities/helper";
-import sequelize from "../../services/connect_sequelize";
+// import sequelize from "../../services/connect_sequelize";
+
+let sequelize = Database.sequelize;
 
 const Hostel = sequelize.define<HostelInterface>(
   "Hostel",
   {
     hostelId: {
       type: DataTypes.UUID,
-      unique: true,
       defaultValue: HelperFunctions.UUID(),
     },
     name: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
     price: {
@@ -33,7 +36,11 @@ const Hostel = sequelize.define<HostelInterface>(
       allowNull: true,
     },
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(...Object.values(Constants.HOSTEL_TYPE)),
+      allowNull: false,
+    },
+    createdBy: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
   },

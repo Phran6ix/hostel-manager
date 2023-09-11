@@ -1,5 +1,6 @@
 import { IResponseType } from "../../utilities/types";
 import UserRepository from "./repository";
+import { IUserType } from "./types";
 
 const Repository = new UserRepository();
 
@@ -13,8 +14,8 @@ export default class UserService {
     await Repository.sign_up(data);
     return {
       status: 201,
-      message: "User registered successfully",
-      data: null,
+      message: "User registered successfully, ",
+      data: { message: "OTP has been sent to your mail" },
     };
   }
 
@@ -60,7 +61,7 @@ export default class UserService {
   }
 
   public static async VerifyOTP(data: { email: string; otp: string }): Promise<IResponseType> {
-    // await Repository.verifyOTP(data);
+    await Repository.verifyOTP(data);
     return {
       status: 200,
       message: "OTP verified",
@@ -82,6 +83,18 @@ export default class UserService {
     return {
       status: 200,
       message: "Phone number has been verified",
+      data: null,
+    };
+  }
+
+  public static async UploadProfilePhoto(data: {
+    user: IUserType;
+    avatar: string;
+  }): Promise<IResponseType> {
+    await Repository.uploadProfilePhoto(data);
+    return {
+      status: 203,
+      message: "Profile photo has been uploaded successsfuly",
       data: null,
     };
   }
@@ -108,11 +121,23 @@ export default class UserService {
       data: null,
     };
   }
-  public static async Get_Current_User(data: { user: any }): Promise<IResponseType> {
+  public static async Get_Current_User(data: { user: Partial<IUserType> }): Promise<IResponseType> {
     return {
       status: 200,
       message: "User data succesfully retrieved",
       data: await Repository.getCurrentUser(data),
+    };
+  }
+
+  public static async updateUserProfile(data: {
+    user: Partial<IUserType>;
+    data: any;
+  }): Promise<IResponseType> {
+    await Repository.updateUserProfile(data);
+    return {
+      status: 203,
+      message: "User profile updated successfully",
+      data: null,
     };
   }
 }

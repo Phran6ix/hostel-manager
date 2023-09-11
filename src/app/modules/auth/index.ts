@@ -27,6 +27,7 @@ class UserRouter {
     this.router.patch(
       `${this.path}/update-password`,
       validate(AuthValidation.update_password_schema),
+      HelperFunctions.protect,
       (...x) => new UserController(...x).HTTPUpdatePassword()
     );
 
@@ -47,8 +48,15 @@ class UserRouter {
       new UserController(...x).HTTPVerifyOTP()
     );
 
-    this.router.get(`${this.path}/me`, validate(AuthValidation.get_current_user), (...x) =>
-      new UserController(...x).HTTPGetCurrentUser()
+    this.router.get(
+      `${this.path}/me`,
+      validate(AuthValidation.get_current_user),
+      HelperFunctions.protect,
+      (...x) => new UserController(...x).HTTPGetCurrentUser()
+    );
+
+    this.router.patch(`${this.path}/update_profile`, HelperFunctions.protect, (...x) =>
+      new UserController(...x).HTTPUpdateUserProfile()
     );
 
     // PHONE VERIFICATION

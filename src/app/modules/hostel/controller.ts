@@ -11,7 +11,10 @@ export default class HostelController extends BaseController {
 
   public async HTTPCreateAnHostel(): Promise<any> {
     try {
-      const data = await this.hostel_service.CreateHostel(this.req.body);
+      const data = await this.hostel_service.CreateHostel({
+        user: this.req.user,
+        ...this.req.body,
+      });
       return this.responseHandler(data);
     } catch (error) {
       this.next(error);

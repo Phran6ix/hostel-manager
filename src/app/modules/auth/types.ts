@@ -1,9 +1,11 @@
 import { Document } from "mongoose";
 export interface IUserType extends Document {
+  userId: string;
   fullname: string;
   email: string;
   phone: string;
   password: string;
+  avatar?: string;
   role: string;
   isVerified: boolean;
   otpVerified?: boolean;
