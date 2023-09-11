@@ -1,7 +1,7 @@
 import { createClient, RedisClientType } from "redis";
 import Config from "../utilities/config";
 
-let redisClient
+let redisClient: RedisClientType
 
 if (Config.NODE_ENV == 'production') {
   redisClient = createClient({ url: Config.REDIS_URL })
