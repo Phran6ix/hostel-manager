@@ -8,6 +8,10 @@ class Constants {
     STUDENT: "STUDENT",
     AGENT: "AGENT",
   };
+
+  public static AGENT_ROLE = {
+    LANDLORD: "LANDLORD"
+  } as const
   public static MAIL_SUBJECT = {
     SIGN_UP: "One Time Password for Account Verification",
     FORGOT_PASSWORD: "Your reset password token",

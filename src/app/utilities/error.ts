@@ -11,6 +11,7 @@ export class HTTPErrorType extends Error {
   }
 }
 
+
 export const NotFoundError = (message: string) =>
   new HTTPErrorType(404, "Account Not Found", message);
 

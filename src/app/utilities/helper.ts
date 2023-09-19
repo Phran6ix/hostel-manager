@@ -10,7 +10,8 @@ import EmailService from "../services/email";
 import { redisClient } from "../services/connect_redis";
 import { AuthorizedError, HTTPErrorType } from "./error";
 import { NextFunction, Response } from "express";
-// import SMSService from "../services/sms";
+import { AgentInterface } from "../modules/agent/type";
+import Agent from "../modules/agent/model";
 
 export class HelperFunctions {
   public static async hashString(string: string) {
@@ -21,7 +22,7 @@ export class HelperFunctions {
   public static async comparePassword(hashed: string, plain: string) {
     return await bcrypt.compare(plain, hashed);
   }
-  public static async getToken(user: Partial<IUserType>) {
+  public static async getToken(user: Partial<IUserType | AgentInterface>) {
     return await jwt.sign(user, Config.JWT_SECRET, { expiresIn: 10000 });
   }
 
@@ -96,11 +97,11 @@ export class HelperFunctions {
     return true;
   }
 
-  public static protect = (req: any, res: any, next: any) => {
+  public static protect(req: any, res: any, next: any) {
     // this.verifyToken(req.headers.authorization.split(" ")[1])
     this.getUserDataFromToken(req.headers)
       .then((res) => {
-        if (!res) throw AuthorizedError("Invalid Token");
+        if (!res) return next(AuthorizedError("Invalid Token"));
         req.user = res;
         next();
       })
@@ -109,7 +110,22 @@ export class HelperFunctions {
       });
   };
 
-  public static validateRole = (...roles: any) => {
+  public static async validateAgent(req: any, res: any, next: any) {
+    try {
+      if (!req.headers.authorization) { return next(AuthorizedError("You are  not logged in")) }
+      let token = req.headers.authorization.split(' ')[0]
+
+      let payload = await this.DecodeJWt(token) as any
+      let agent = await Agent.findOne({ agentId: payload.agentId })
+
+      req.user = agent
+      return next()
+    } catch (error) {
+      throw error
+    }
+  }
+
+  public static validateRole(...roles: any) {
     return (req: any, res: any, next: any) => {
       if (!roles.includes(req.user.role)) throw AuthorizedError("You are not authorized");
       next();

@@ -11,11 +11,12 @@ import UserRouter from "./app/modules/auth";
 import HostelRoutes from "./app/modules/hostel";
 import { HTTPErrorType } from "./app/utilities/error";
 import ErrorHandler from "./app/utilities/globalErrorHandler";
+import { AgentInterface } from "./app/modules/agent/type";
 
 declare global {
   namespace Express {
     export interface Request {
-      user?: IUserType;
+      user?: IUserType | AgentInterface;
     }
   }
 }
@@ -27,7 +28,7 @@ class Server {
   constructor() {
     this.startServer();
     this.middleWare();
-    this.connectDb();
+    this.connectDb(); error
     this.health();
     this.instatiateRoutes();
     this.app.use(this.GlobalErrorHandler());
