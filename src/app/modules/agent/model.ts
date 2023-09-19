@@ -20,6 +20,9 @@ const AgentSchema = new Schema<AgentInterface>({
         type: String,
         enum: [...Object.values(Constants.AGENT_ROLE)]
     },
+    avatar: {
+        type: String
+    },
     agencyName: {
         type: String,
         required: false

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import BaseController from "../baseController";
 import UserService from "./service";
 import { HelperFunctions } from "../../utilities/helper";
+import { IUserType } from "./types";
 
 class UserController extends BaseController {
   constructor(req: Request, res: Response, next: NextFunction) {
@@ -95,7 +96,7 @@ class UserController extends BaseController {
   public async HTTPGetCurrentUser(): Promise<any> {
     try {
       // const user = await HelperFunctions.getUserDataFromToken(this.req.headers);
-      const data = await UserService.Get_Current_User({ user: this.req.user! });
+      const data = await UserService.Get_Current_User({ user: this.req.user as IUserType });
       this.responseHandler(data);
     } catch (error) {
       this.next(error);
@@ -106,7 +107,7 @@ class UserController extends BaseController {
     try {
       console.log(this.req.user);
       const data = await UserService.updateUserProfile({
-        user: this.req.user!,
+        user: this.req.user as IUserType,
         data: this.req.body,
       });
       this.responseHandler(data);

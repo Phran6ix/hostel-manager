@@ -6,6 +6,7 @@ export interface AgentInterface extends Document {
     email: string;
     password: string;
     role: string;
+    avatar: string;
     agencyName: string;
     phoneNumber: string;
     address: string;

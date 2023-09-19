@@ -9,6 +9,7 @@ import { IUserType } from "./app/modules/auth/types";
 // ROUTES
 import UserRouter from "./app/modules/auth";
 import HostelRoutes from "./app/modules/hostel";
+import AgentRoutes from './app/modules/agent'
 import { HTTPErrorType } from "./app/utilities/error";
 import ErrorHandler from "./app/utilities/globalErrorHandler";
 import { AgentInterface } from "./app/modules/agent/type";
@@ -28,9 +29,9 @@ class Server {
   constructor() {
     this.startServer();
     this.middleWare();
-    this.connectDb(); error
+    this.connectDb();
     this.health();
-    this.instatiateRoutes();
+    this.instantiateRoutes();
     this.app.use(this.GlobalErrorHandler());
   }
 
@@ -57,8 +58,8 @@ class Server {
     });
   }
 
-  private instatiateRoutes() {
-    let routes: IRoutes[] = [new UserRouter(), new HostelRoutes()];
+  private instantiateRoutes() {
+    let routes: IRoutes[] = [new UserRouter(), new HostelRoutes(), new AgentRoutes()];
 
     routes.forEach((router) => {
       this.app.use(this.apiVersion, router["router"]);
