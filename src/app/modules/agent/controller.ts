@@ -12,7 +12,9 @@ export default class AgentController extends BaseController {
 
     async HTTPAgentSignIn(): Promise<void> {
         try {
+            console.log('1')
             const data = await this.service.AgentSignIn({ ...this.req.body })
+            console.log(data)
             this.responseHandler(data)
         } catch (error) {
             this.next(error)
@@ -22,7 +24,7 @@ export default class AgentController extends BaseController {
     async HTTPSignUp(): Promise<void> {
         try {
             const data = await this.service.AgentSignUp({ ...this.req.body })
-            this.responseHandler({ ...this.req.body })
+            this.responseHandler(data)
         } catch (error) {
             this.next(error)
         }

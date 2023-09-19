@@ -10,7 +10,8 @@ class Constants {
   };
 
   public static AGENT_ROLE = {
-    LANDLORD: "LANDLORD"
+    LANDLORD: "Landlord",
+    AGENT: "Agent"
   } as const
   public static MAIL_SUBJECT = {
     SIGN_UP: "One Time Password for Account Verification",

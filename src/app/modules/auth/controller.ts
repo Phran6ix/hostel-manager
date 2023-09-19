@@ -8,7 +8,7 @@ class UserController extends BaseController {
   constructor(req: Request, res: Response, next: NextFunction) {
     super(req, res, next);
   }
-  public async HTTPRegiserAUser(): Promise<any> {
+  public async HTTPRegisterAUser(): Promise<any> {
     try {
       const data = await UserService.RegisterUser(this.req.body);
       this.responseHandler(data);

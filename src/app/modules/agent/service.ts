@@ -21,7 +21,7 @@ export default class AgentService {
         return {
             status: 200,
             message: "Account signed in successfully",
-            data: await this.repository.SignUpAsAgent(payload)
+            data: await this.repository.LoginAsAnAgent(payload)
         }
     }
 }

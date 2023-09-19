@@ -2,11 +2,17 @@ import { Schema, model } from 'mongoose'
 import { AgentInterface } from './type'
 import { HelperFunctions } from '../../utilities/helper'
 import Constants from '../../utilities/constant'
+import { transform } from 'typescript'
 
 const AgentSchema = new Schema<AgentInterface>({
     agentId: {
         type: String,
         default: () => HelperFunctions.UUID()
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: true
     },
     name: {
         type: String,
@@ -35,6 +41,16 @@ const AgentSchema = new Schema<AgentInterface>({
         type: String,
         required: true
     }
+}, {
+    timestamps: true, versionKey: false,
+    toObject: {
+        transform: function (doc, ret) {
+            delete ret._id
+            let { password, ...returnValue } = ret
+            return returnValue
+        }
+    }
+
 })
 
 const Agent = model<AgentInterface>('Agent', AgentSchema)

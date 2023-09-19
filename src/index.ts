@@ -67,9 +67,11 @@ class Server {
   }
 
   private GlobalErrorHandler() {
-    return (err: HTTPErrorType, req: Request, res: Response, next: NextFunction) => {
+    return (err: any, req: Request, res: Response, next: NextFunction) => {
+      console.log(err)
       if (err) {
-        if (err.name == "ZodError") return ErrorHandler.HandleZodError(err, req, res, next);
+        if (err.name == "ZodError") return ErrorHandler.HandleZodError(err, res);
+        if (err.code == 11000) { return ErrorHandler.HandleDuplicateError(err, res,) }
 
         res.status(err.statusCode || 500).json({
           success: false,

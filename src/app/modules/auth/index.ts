@@ -14,7 +14,7 @@ class UserRouter {
   }
   private initializeRoute() {
     this.router.post(`${this.path}`, validate(AuthValidation.sign_up_schema), (...a) =>
-      new UserController(...a).HTTPRegiserAUser()
+      new UserController(...a).HTTPRegisterAUser()
     );
     this.router.post(`${this.path}/sign_in`, validate(AuthValidation.login_schema), (...x) =>
       new UserController(...x).HTTPLoginAUser()

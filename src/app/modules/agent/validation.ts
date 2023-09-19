@@ -4,7 +4,8 @@ import Constants from '../../utilities/constant'
 export default {
     agent_sign_up: z.object({
         body: z.object({
-            name: z.string({ required_error: "name is required" }).email().toLowerCase(),
+            name: z.string({ required_error: "name is required" }),
+            email: z.string({ required_error: "email is required" }).email("Please input a valid email").toLowerCase(),
             password: z.string({ required_error: "password is required" }).min(6, "password should be a minimum of 6 characters").refine((password) => {
                 const regex = /^[a-zA-Z0-9]*$/
                 return regex.test(password)
@@ -17,8 +18,10 @@ export default {
     }),
 
     agent_sign_in: z.object({
-        email: z.string().email().toLowerCase().optional(),
-        phone: z.string().optional(),
-        password: z.string({ required_error: "password is required" })
+        body: z.object({
+            email: z.string().email().toLowerCase().optional(),
+            phone: z.string().optional(),
+            password: z.string({ required_error: "password is required" })
+        })
     })
 }

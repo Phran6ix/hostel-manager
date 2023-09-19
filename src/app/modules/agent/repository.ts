@@ -6,14 +6,14 @@ import { AgentInterface } from "./type";
 export default class AgentRepo {
     private model = Agent
 
-    async SignUpAsAgent(payload: Partial<AgentInterface>): Promise<AgentInterface> {
+    async SignUpAsAgent(payload: Partial<AgentInterface>): Promise<Partial<AgentInterface>> {
         try {
-            const agent = new Agent({ ...payload })
+            const agent = new this.model({ ...payload })
 
             agent.password = await HelperFunctions.hashString("" + payload.password) as string
 
-
-            return agent as AgentInterface
+            await agent.save()
+            return agent.toObject()
         } catch (error) {
             throw error
         }
@@ -34,7 +34,7 @@ export default class AgentRepo {
                 throw InvalidRequestError("Invalid password")
             }
 
-            return { token: await HelperFunctions.getToken(agent), agent }
+            return { token: await HelperFunctions.getToken(agent.toObject()), agent: agent.toObject() as AgentInterface }
         } catch (error) {
             throw error
         }
