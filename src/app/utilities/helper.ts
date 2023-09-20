@@ -8,7 +8,7 @@ import Constants from "./constant";
 import { IUserType } from "../modules/auth/types";
 import EmailService from "../services/email";
 import { redisClient } from "../services/connect_redis";
-import { AuthorizedError, HTTPErrorType } from "./error";
+import { AuthorizedError, HTTPErrorType, InvalidRequestError } from "./error";
 import { NextFunction, Response } from "express";
 import { AgentInterface } from "../modules/agent/type";
 import Agent from "../modules/agent/model";
@@ -116,7 +116,12 @@ export class HelperFunctions {
       let token = req.headers.authorization.split(' ')[0]
 
       let payload = await this.DecodeJWt(token) as any
+      if (!payload) {
+        return next(AuthorizedError("Invalid Token"))
+      }
       let agent = await Agent.findOne({ agentId: payload.agentId })
+
+      if (!agent) { return next(InvalidRequestError("Something went wrong, please sign in again")) }
 
       req.user = agent
       return next()

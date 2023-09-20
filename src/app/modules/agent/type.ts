@@ -10,4 +10,5 @@ export interface AgentInterface extends Document {
     agencyName: string;
     phoneNumber: string;
     address: string;
+    isVerified: boolean
 }

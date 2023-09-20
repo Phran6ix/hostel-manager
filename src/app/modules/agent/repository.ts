@@ -1,6 +1,7 @@
-import { InvalidRequestError, NotFoundError } from "../../utilities/error";
+import { AccountStatusError, ExistError, InvalidRequestError, NotFoundError } from "../../utilities/error";
 import { HelperFunctions } from "../../utilities/helper";
 import Agent from "./model";
+import User from '../auth/model'
 import { AgentInterface } from "./type";
 
 export default class AgentRepo {
@@ -10,8 +11,12 @@ export default class AgentRepo {
         try {
             const agent = new this.model({ ...payload })
 
+            if (await User.findOne({ email: payload.email }).lean().select("email")) {
+                throw ExistError("An Account with this email already exists")
+            }
             agent.password = await HelperFunctions.hashString("" + payload.password) as string
 
+            await HelperFunctions.sendOTPToEmail(agent.email, "One-Time password for you account verification")
             await agent.save()
             return agent.toObject()
         } catch (error) {
@@ -40,7 +45,20 @@ export default class AgentRepo {
         }
     }
 
-    async VerifyAgentAccount(): Promise<void> { }
+    async VerifyAgentAccount(data: { email: string, otp: string }): Promise<void> {
+        try {
+            let agent = await Agent.findOne({ email: data.email }).select('isVerified')
+            if (!agent) { throw NotFoundError("Account not found") }
+
+            if (agent.isVerified) { throw AccountStatusError("Your account has already been verified") }
+
+            agent.isVerified = true
+            await agent.save()
+            return
+        } catch (error) {
+            throw error
+        }
+    }
     async ForgotPassword(): Promise<void> { }
     async ResetPassword(): Promise<void> { }
 }

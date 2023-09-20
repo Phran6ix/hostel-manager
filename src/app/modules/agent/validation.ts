@@ -23,5 +23,12 @@ export default {
             phone: z.string().optional(),
             password: z.string({ required_error: "password is required" })
         })
+    }),
+
+    agent_verify_account: z.object({
+        body: z.object({
+            email: z.string({ required_error: "email is required" }).email().toLowerCase(),
+            otp: z.string({ required_error: "otp is required" })
+        })
     })
 }

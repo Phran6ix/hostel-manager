@@ -24,4 +24,12 @@ export default class AgentService {
             data: await this.repository.LoginAsAnAgent(payload)
         }
     }
+
+    async VerifyAgentAccount(payload: { email: string, otp: string }): Promise<IResponseType> {
+        return {
+            status: 200,
+            message: "Account has been verified successfully",
+            data: await this.repository.VerifyAgentAccount(payload)
+        }
+    }
 }

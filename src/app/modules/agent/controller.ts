@@ -29,4 +29,13 @@ export default class AgentController extends BaseController {
             this.next(error)
         }
     }
+
+    async HTTPAgentVerifyAccount(): Promise<void> {
+        try {
+            const data = await this.service.VerifyAgentAccount({ ...this.req.body })
+            this.responseHandler(data)
+        } catch (error) {
+            this.next(error)
+        }
+    }
 }

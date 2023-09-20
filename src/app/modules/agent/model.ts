@@ -40,6 +40,10 @@ const AgentSchema = new Schema<AgentInterface>({
     address: {
         type: String,
         required: true
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true, versionKey: false,

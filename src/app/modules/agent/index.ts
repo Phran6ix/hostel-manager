@@ -16,6 +16,7 @@ class AgentRouter {
 
         this.router.post(`${this.path}/register`, HelperFunctions.validate(AgentValidation.agent_sign_up), (...x) => new AgentController(...x).HTTPSignUp())
         this.router.post(`${this.path}/login`, HelperFunctions.validate(AgentValidation.agent_sign_in), (...x) => new AgentController(...x).HTTPAgentSignIn())
+        this.router.patch(`${this.path}/verify-account`, HelperFunctions.validate(AgentValidation.agent_verify_account), (...x) => new AgentController(...x).HTTPAgentVerifyAccount())
 
     }
 }
