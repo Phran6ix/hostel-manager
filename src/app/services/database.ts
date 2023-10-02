@@ -51,7 +51,7 @@ export default class Database {
     //   });
 
     Database.sequelize
-      .sync({ alter: true })
+      .sync({ alter: false })
       .then(() => {
         console.log("Sequelize Database connected successfully");
       })

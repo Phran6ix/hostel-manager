@@ -32,4 +32,22 @@ export default class AgentService {
             data: await this.repository.VerifyAgentAccount(payload)
         }
     }
+
+    async ForgotAgentAccountPassword(payload: { email: string }): Promise<IResponseType> {
+        await this.repository.ForgotPassword(payload)
+        return {
+            status: 200,
+            "message": "OTP for password reset has been sent to your mail",
+            data: null
+        }
+    }
+
+    async ResetAgentAccountPassword(payload: { email: string, otp: string, password: string }): Promise<IResponseType> {
+        await this.repository.ResetPassword(payload)
+        return {
+            status: 200,
+            message: "Password has been reset successfully",
+            data: null
+        }
+    }
 }

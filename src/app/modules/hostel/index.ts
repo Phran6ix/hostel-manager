@@ -18,34 +18,35 @@ export default class HostelRoutes {
     this.router.post(
       `${this.path}`,
       validate(HostelValidation.create_hoste_validation),
-      HelperFunctions.protect,
-      HelperFunctions.validateRole(Constants.USER_ROLES["AGENT"]),
+      HelperFunctions.validateAgent,
       (...x) => new HostelController(...x).HTTPCreateAnHostel()
     );
+
     this.router.get(
       `${this.path}`,
       validate(HostelValidation.get_all_hostel),
       HelperFunctions.protect,
       (...x) => new HostelController(...x).HTTPGetAllHostels()
     );
+
     this.router.get(
       `${this.path}/:hostelId`,
       validate(HostelValidation.get_a_hostel),
       HelperFunctions.protect,
       (...x) => new HostelController(...x).HTTPGetAHostel()
     );
+
     this.router.patch(
       `${this.path}/update-hostel`,
       validate(HostelValidation.update_hostel),
-      HelperFunctions.protect,
-      HelperFunctions.validateRole(Constants.USER_ROLES["AGENT"]),
+      HelperFunctions.validateAgent,
       (...x) => new HostelController(...x).HTTPUpdateHostel()
     );
+
     this.router.delete(
       `${this.path}/delete-hostel/:hostelId`,
       validate(HostelValidation.delete_hostel),
-      HelperFunctions.protect,
-      HelperFunctions.validateRole(Constants.USER_ROLES["AGENT"]),
+      HelperFunctions.validateAgent,
       (...x) => new HostelController(...x).HTTPDeleteHostel()
     );
   }

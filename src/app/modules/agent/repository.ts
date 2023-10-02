@@ -28,8 +28,8 @@ export default class AgentRepo {
         try {
             let agent
 
-            if (payload.email) { agent = await Agent.findOne({ email: payload.email }) }
-            if (payload.phone) { agent = await Agent.findOne({ phone: payload.phone }) }
+            if (payload.email) { agent = await this.model.findOne({ email: payload.email }) }
+            if (payload.phone) { agent = await this.model.findOne({ phone: payload.phone }) }
 
             if (!agent) {
                 throw NotFoundError("Account not found")
@@ -47,10 +47,13 @@ export default class AgentRepo {
 
     async VerifyAgentAccount(data: { email: string, otp: string }): Promise<void> {
         try {
-            let agent = await Agent.findOne({ email: data.email }).select('isVerified')
+            let agent = await this.model.findOne({ email: data.email }).select('isVerified email')
             if (!agent) { throw NotFoundError("Account not found") }
 
             if (agent.isVerified) { throw AccountStatusError("Your account has already been verified") }
+
+            let verifiedStatus = await HelperFunctions.verifyOTP(agent.email, data.otp)
+            if (!verifiedStatus) { throw AccountStatusError("Invalid OTP, please try again") }
 
             agent.isVerified = true
             await agent.save()
@@ -59,6 +62,36 @@ export default class AgentRepo {
             throw error
         }
     }
-    async ForgotPassword(): Promise<void> { }
-    async ResetPassword(): Promise<void> { }
+    async ForgotPassword(data: { email: string }): Promise<void> {
+        try {
+            const agent = await this.model.findOne({ email: data.email }).lean().select('email')
+            if (!agent) { throw NotFoundError("Account with not found") }
+
+            await HelperFunctions.sendOTPToEmail(agent.email, "OTP for password reset")
+            return
+
+        } catch (error) {
+            throw error
+        }
+    }
+    async ResetPassword(data: { otp: string, password: string, email: string }): Promise<void> {
+        try {
+            const agent = await this.model.findOne({ email: data.email }).select('email password')
+            if (!agent) { throw NotFoundError("Account not found") }
+
+            let verifyStatus = await HelperFunctions.verifyOTP(data.email, data.otp)
+            if (!verifyStatus) { throw AccountStatusError("Invalid OTP") }
+
+            if (await HelperFunctions.comparePassword(agent.password, data.password)) {
+                throw InvalidRequestError("New password cannot be the same as the old password")
+            }
+
+            agent.password = await HelperFunctions.hashString(data.password)
+            await agent.save()
+            return
+
+        } catch (error) {
+            throw error
+        }
+    }
 }

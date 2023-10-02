@@ -26,10 +26,11 @@ export class HelperFunctions {
     return await jwt.sign(user, Config.JWT_SECRET, { expiresIn: 10000 });
   }
 
-  public static async DecodeJWt(token: string): Promise<Partial<IUserType>> {
+  public static async DecodeJWt(token: string): Promise<IUserType | AgentInterface> {
+
     const user = await this.verifyToken(token);
 
-    return user as IUserType;
+    return user as IUserType | AgentInterface ;
   }
 
   public static async getUserDataFromToken(headers: any) {
@@ -99,6 +100,7 @@ export class HelperFunctions {
 
   public static protect(req: any, res: any, next: any) {
     // this.verifyToken(req.headers.authorization.split(" ")[1])
+    console.log('Restricted route')
     this.getUserDataFromToken(req.headers)
       .then((res) => {
         if (!res) return next(AuthorizedError("Invalid Token"));
@@ -113,13 +115,15 @@ export class HelperFunctions {
   public static async validateAgent(req: any, res: any, next: any) {
     try {
       if (!req.headers.authorization) { return next(AuthorizedError("You are  not logged in")) }
-      let token = req.headers.authorization.split(' ')[0]
+      let token = req.headers.authorization.split(' ')[1]
 
-      let payload = await this.DecodeJWt(token) as any
+      let payload = await HelperFunctions.DecodeJWt(token) as AgentInterface
       if (!payload) {
         return next(AuthorizedError("Invalid Token"))
       }
-      let agent = await Agent.findOne({ agentId: payload.agentId })
+      console.log(payload)
+      let agent = await Agent.findOne({ agentId: payload.agentId }).lean()
+      console.log(agent)
 
       if (!agent) { return next(InvalidRequestError("Something went wrong, please sign in again")) }
 

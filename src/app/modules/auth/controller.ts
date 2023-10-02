@@ -62,7 +62,7 @@ class UserController extends BaseController {
   }
   public async HTTPResendOTP(): Promise<any> {
     try {
-      const data = await UserService.ResendOTP(this.req.body["email"]);
+      const data = await UserService.ResendOTP(this.req.query["email"] as string);
       this.responseHandler(data);
     } catch (error) {
       this.next(error);

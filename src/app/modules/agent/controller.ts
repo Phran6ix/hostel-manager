@@ -38,4 +38,21 @@ export default class AgentController extends BaseController {
             this.next(error)
         }
     }
+    async HTTPAgentForgetPassword(): Promise<void> {
+        try {
+            const data = await this.service.ForgotAgentAccountPassword({ ...this.req.body })
+            this.responseHandler(data)
+        } catch (error) {
+            this.next(error)
+        }
+    }
+
+    async HTTPResetAgentPassword(): Promise<void> {
+        try {
+            const data = await this.service.ResetAgentAccountPassword({ otp: this.req.params.otp, ...this.req.body })
+            this.responseHandler(data)
+        } catch (error) {
+            this.next(error)
+        }
+    }
 }
