@@ -24,7 +24,7 @@ services:
       start_period: 30s
     networks:
       - hostel-manager
-    command: npm start:dev
+    command: npm run start:dev
 
   mongo:
     image: mongo:4.4.6
