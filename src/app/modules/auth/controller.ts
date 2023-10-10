@@ -78,7 +78,7 @@ class UserController extends BaseController {
   }
   public async HTTPForgotPassword(): Promise<any> {
     try {
-      const data = await UserService.Forgot_password(this.req.body);
+      const data = await UserService.Forgot_password(this.req.query);
       this.responseHandler(data);
     } catch (error) {
       this.next(error);
