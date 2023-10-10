@@ -14,7 +14,7 @@ export class HTTPErrorType extends Error {
 export const ExistError = (message: string) => new HTTPErrorType(400, "Duplicate Error", message)
 
 export const NotFoundError = (message: string) =>
-  new HTTPErrorType(404, "Account Not Found", message);
+  new HTTPErrorType(404, "Document Not Found", message);
 
 export const InvalidTokenError = (message: string) =>
   new HTTPErrorType(400, "Invalid Token", message);

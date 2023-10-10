@@ -40,13 +40,14 @@ export default class HostelService {
     };
   }
   public async UpdateHostel(data: {
-    hostelId: string;
+            hostelId: string;
     data: Partial<HostelInterface>;
   }): Promise<IResponseType> {
+        await this.hostel_repo.UpdateHostel(data)
     return {
       status: 200,
       message: "Hostel Data updated successfully",
-      data: await this.hostel_repo.UpdateHostel(data),
+      data: null
     };
   }
   public async DeleteHostel(data: { hostelId: string }): Promise<IResponseType> {

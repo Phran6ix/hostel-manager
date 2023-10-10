@@ -13,7 +13,8 @@ export default class HostelRepository {
 
   public async createHostel(props: Partial<HostelInterface>): Promise<HostelInterface> {
     try {
-      const hostel = await this.hostel_model.create(props);
+            console.log(props)
+      const hostel = await this.hostel_model.create({...props});
       return hostel;
     } catch (error) {
       throw error;
@@ -25,14 +26,15 @@ export default class HostelRepository {
     page?: number;
   }): Promise<{ hostels: HostelInterface[]; total: number }> {
     try {
-      let filterPaginate: any = {};
-      if (props.limit || props.page) {
-        filterPaginate = { page: props.page, limit: props.limit };
-      }
+      let filterPaginate = {
+                page: props.page || 1,
+                limit: props.limit || 10
+            }
 
       const { rows, count } = await this.hostel_model.findAndCountAll({
         ...HelperFunctions.paginate({ ...filterPaginate }),
       });
+            console.log(rows)
       return { total: count, hostels: rows };
     } catch (error) {
       throw error;
@@ -41,6 +43,7 @@ export default class HostelRepository {
 
   public async GetAHostel(props: { hostelId: string }): Promise<HostelInterface> {
     try {
+            console.log('OVER HERE')
       const hostel = await this.hostel_model.findOne({
         where: {
           hostelId: props.hostelId,
@@ -58,6 +61,7 @@ export default class HostelRepository {
     data: Partial<HostelInterface>;
   }): Promise<any> {
     try {
+        console.log(props)
       const hostel = await this.hostel_model.update(
         { ...props.data },
         { where: { hostelId: props.hostelId } }
@@ -73,6 +77,9 @@ export default class HostelRepository {
 
   public async DeleteHostel(props: { hostelId: string }): Promise<void> {
     try {
+        if (await this.GetAHostel({hostelId: props.hostelId})) {
+                throw NotFoundError("Hostel with this not found")
+            }
       let hostel = await this.hostel_model.destroy({ where: { hostelId: props.hostelId } });
       console.log(hostel);
       return;

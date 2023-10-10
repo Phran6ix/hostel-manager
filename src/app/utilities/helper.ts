@@ -36,6 +36,7 @@ export class HelperFunctions {
   public static async getUserDataFromToken(headers: any) {
     const token = headers.authorization.split(" ")[1];
     const data = await this.DecodeJWt(token);
+        console.log('DATA', data, 'TOKEN', token)
     return data;
   }
 
@@ -101,7 +102,7 @@ export class HelperFunctions {
   public static protect(req: any, res: any, next: any) {
     // this.verifyToken(req.headers.authorization.split(" ")[1])
     console.log('Restricted route')
-    this.getUserDataFromToken(req.headers)
+    HelperFunctions.getUserDataFromToken(req.headers)
       .then((res) => {
         if (!res) return next(AuthorizedError("Invalid Token"));
         req.user = res;
@@ -143,12 +144,13 @@ export class HelperFunctions {
 
   public static validate(schema: AnyZodObject) {
     return async (req: any, res: any, next: any) => {
+            console.log(req.params)
       try {
         await schema.parse({
           headers: req.headers,
           body: req.body,
           query: req.query,
-          params: req.param,
+          params: req.params,
         });
         return next();
       } catch (error) {
@@ -163,6 +165,7 @@ export class HelperFunctions {
 
   public static paginate(data: { page: number; limit: number }): { limit: number; offset: number } {
     const offset = data.page * data.limit - data.limit;
+        console.log(offset, data)
     return {
       offset,
       limit: data.limit,

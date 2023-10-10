@@ -236,6 +236,7 @@ class UserRepository implements IUserRepo<IUserType> {
   }
   public async getCurrentUser(data: { user: Partial<IUserType> }): Promise<IUserType> {
     try {
+            console.log(data)
       const user = await User.findOne({ email: data.user["email"] });
       if (!user) throw NotFoundError("Account Not found");
       return user.toJSON();
