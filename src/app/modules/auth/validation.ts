@@ -38,7 +38,7 @@ class AuthValidation {
   });
 
   static forgot_password = z.object({
-    body: z.object({
+   query: z.object({
       email: z.string({ required_error: "Email is required" }).email().trim().toLowerCase(),
     }),
   });
