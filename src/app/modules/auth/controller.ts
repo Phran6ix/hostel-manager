@@ -32,6 +32,15 @@ class UserController extends BaseController {
       this.next(error);
     }
   }
+     public async HTTPGetUserProfileSummart():Promise<void> {
+        try {
+            let {userId} = this.req.user as IUserType
+           const data = await UserService.GetProfileSummary({userId}) 
+            this.responseHandler(data)
+        } catch (error) {
+           this.next(error) 
+        }
+    }
 
   // public async HTTPSendPhoneVerification(): Promise<any> {
   //   try {

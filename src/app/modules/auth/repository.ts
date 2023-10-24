@@ -155,6 +155,20 @@ class UserRepository implements IUserRepo<IUserType> {
     }
   }
 
+    public async GetUserProfileSummary (data :{userId: string}): Promise<{user: IUserType}> {
+        try {
+           const user = await User.findOne({userId: data.userId}).lean().select("fullname phone email avatar")
+            if(!user) {
+                throw NotFoundError("User not found")
+            }
+
+            return {user}
+
+        } catch (error) {
+            throw error
+        }
+    }
+
   // FOR PHONE NUMBER VERIFICATION
   // public async sendOTPToPhone(props: { phone: string }): Promise<void> {
   //   try {
@@ -247,7 +261,8 @@ class UserRepository implements IUserRepo<IUserType> {
 
   public async updateUserProfile(props: { user: Partial<IUserType>; data: any }): Promise<void> {
     try {
-      const user = (await User.findOne({ userId: props.user.userId })) as any;
+            console.log(props)
+      const user = (await User.findOne({ userId: props.user.userId })) as IUserType;
       if (!user) throw NotFoundError("User not found");
       console.log(user);
 
@@ -255,12 +270,17 @@ class UserRepository implements IUserRepo<IUserType> {
         throw AuthorizedError("Email cannot be updated after registration");
       }
 
-      Object.keys(props.data).forEach((key: any) => {
-        user[key] = props.data.key;
-      });
-      console.log(user);
+      // Object.keys(props.data).forEach((key: any) => {
+      //           console.log(key)
+      //           
+      //           console.log(props.data.key)
+      //   user[key] = props.data.key;
+      // });
 
-      await user.save();
+            await User.updateOne({userId: props.user.userId}, { ...props.data})
+                        
+      console.log(user);
+      // await user.save();
       return;
     } catch (error) {
       throw error;

@@ -24,6 +24,7 @@ class UserRouter {
       new UserController(...x).HTTPVerifyAccount()
     );
 
+    this.router.get(`${this.path}/my_profile`, HelperFunctions.protect, (...x) => new UserController(...x).HTTPGetUserProfileSummart())
     this.router.patch(
       `${this.path}/update-password`,
       validate(AuthValidation.update_password_schema),

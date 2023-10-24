@@ -69,6 +69,13 @@ export default class UserService {
     };
   }
 
+    public static async GetProfileSummary (data: {userId: string}):Promise<IResponseType> {
+        return {
+            status: 200,
+            message: "User profile fetched successfully",
+            data: await Repository.GetUserProfileSummary(data)
+        }
+    }
   public static async SendPhoneOTP(data: { phone: string }): Promise<IResponseType> {
     // await Repository.sendOTPToPhone(data);
     return {
