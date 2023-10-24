@@ -23,7 +23,7 @@ export class HelperFunctions {
     return await bcrypt.compare(plain, hashed);
   }
   public static async getToken(user: Partial<IUserType | AgentInterface>) {
-    return await jwt.sign(user, Config.JWT_SECRET, { expiresIn: 10000 });
+    return  jwt.sign(user, Config.JWT_SECRET, { expiresIn: 10000 });
   }
 
   public static async DecodeJWt(token: string): Promise<IUserType | AgentInterface> {
@@ -41,7 +41,7 @@ export class HelperFunctions {
   }
 
   public static async verifyToken(token: string) {
-    return await jwt.verify(token, Config.JWT_SECRET);
+    return jwt.verify(token, Config.JWT_SECRET);
   }
 
   // public
