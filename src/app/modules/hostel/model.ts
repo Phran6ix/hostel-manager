@@ -30,11 +30,13 @@ const Hostel = sequelize.define<HostelInterface>(
     address: {
       type: DataTypes.STRING,
       allowNull: false,
+            
     },
     images: {
       type: DataTypes.JSON,
       allowNull: true,
     },
+    
     type: {
       type: DataTypes.ENUM(...Object.values(Constants.HOSTEL_TYPE)),
       allowNull: false,
@@ -43,6 +45,20 @@ const Hostel = sequelize.define<HostelInterface>(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    description: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        review: {
+            type: DataTypes.FLOAT,
+            defaultValue: 5.0
+        },
+        facilities: {
+            type: DataTypes.JSON,
+        },
+        gallery: {
+            type: DataTypes.JSON
+        }
   },
   {
     timestamps: true,

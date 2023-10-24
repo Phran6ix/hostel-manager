@@ -269,14 +269,7 @@ class UserRepository implements IUserRepo<IUserType> {
       if (!!props.data.email) {
         throw AuthorizedError("Email cannot be updated after registration");
       }
-
-      // Object.keys(props.data).forEach((key: any) => {
-      //           console.log(key)
-      //           
-      //           console.log(props.data.key)
-      //   user[key] = props.data.key;
-      // });
-
+    
             await User.updateOne({userId: props.user.userId}, { ...props.data})
                         
       console.log(user);

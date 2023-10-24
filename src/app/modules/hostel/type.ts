@@ -14,4 +14,8 @@ export interface HostelInterface extends Model {
   type: HostelType;
   createdBy: string;
   createdAt?: Date;
+  description: string;
+  facilities: string[];
+  reviews: number
+    gallery: {toilet: string[], bathroom: string[], room: string[]}
 }
